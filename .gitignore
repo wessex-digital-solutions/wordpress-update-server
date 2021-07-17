@@ -58,3 +58,7 @@ typings/
 
 # output folder
 dist/
+
+# IDE settings
+.idea
+.vscode
