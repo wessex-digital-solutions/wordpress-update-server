@@ -1,6 +1,7 @@
 import express from 'express';
+import { indexPage } from '../controllers';
 
-const router = express.Router();
-router.get('/', (req, res) => res.status(200).json({ message: 'API is healthy' }));
+const indexRouter = express.Router();
+indexRouter.get('/', indexPage);
 
-export default router;
+export default indexRouter;

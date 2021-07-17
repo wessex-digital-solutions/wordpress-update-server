@@ -7,7 +7,7 @@ describe('Index page test', () => {
       .expect(200)
       .end((err, res) => {
         expect(res.status).to.equal(200);
-        expect(res.body.message).to.equal('API is healthy');
+        expect(res.body.message).to.equal('API seems to be working');
         done();
       });
   });
