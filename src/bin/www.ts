@@ -7,36 +7,7 @@ import debug from 'debug';
 import http from 'http';
 import app from '../app';
 import { port } from '../settings';
-import express from 'express';
-import * as winston from 'winston';
-import * as expressWinston from 'express-winston';
-import cors from 'cors';
-const debugLog = debug('app');
-
-const Cors = cors({
-  origin: true,
-  allowedHeaders: [
-    'Access-Control-Allow-Headers',
-    'Origin',
-    'Accept',
-    'x-api-key',
-    'X-Signature',
-    'Content-Type',
-    'Access-Control-Request-Method',
-    'Access-Control-Request-Headers',
-  ],
-  methods: ['GET', 'HEAD', 'OPTIONS', 'POST', 'PUT', 'PATCH', 'DELETE'],
-  credentials: true,
-});
-
-app.use(Cors);
-
-app.all('*', (req, res, next) => {
-  Cors;
-  next();
-});
-
-app.options('*', Cors);
+const debugLog = debug('www');
 
 /**
  * Normalize a port into a number, string, or false.
