@@ -16,4 +16,20 @@ describe('Messages', () => {
         done();
       });
   });
+
+  it('posts messages', (done) => {
+    const data = { name: 'test', message: 'test message' };
+    server
+      .post(`${BASE_URL}/messages`)
+      .send(data)
+      .expect(201)
+      .end((err, res) => {
+        expect(res.status).to.equal(201);
+        const message = res.body.message;
+        expect(message).to.have.property('id');
+        expect(message).to.have.property('name', data.name);
+        expect(message).to.have.property('message', data.message);
+        done();
+      });
+  });
 });
