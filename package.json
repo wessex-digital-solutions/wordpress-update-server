@@ -6,10 +6,15 @@
   "author": "Wessex Digital Solutions <contact@wessexdigitalsolutions.co.uk>",
   "license": "MIT",
   "scripts": {
-    "start": "node ./dist/app.js",
+    "start": "node ./dist/bin/www.js",
     "build": "tsc",
     "dev": "concurrently -r \"tsc -w\" \"nodemon --watch ./dist/ --exec yarn start\"",
-    "debug": "export DEBUG=* && npm run dev"
+    "debug": "export DEBUG=* && npm run dev",
+    "lint": "./node_modules/.bin/eslint \"src/**\"",
+    "pretty": "prettier --write '**/*.{js,json}' '!node_modules/**'",
+    "postpretty": "yarn lint --fix",
+    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' nyc --reporter=html --reporter=text --reporter=lcov mocha -r ts-node/register 'test/**/*.ts'",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -20,11 +25,28 @@
     "winston": "^3.3.3"
   },
   "devDependencies": {
+    "@types/chai": "^4.2.21",
     "@types/cors": "^2.8.12",
     "@types/debug": "^4.1.6",
     "@types/express": "^4.17.13",
+    "@types/mocha": "^8.2.3",
+    "@types/sinon-chai": "^3.2.5",
+    "@types/supertest": "^2.0.11",
+    "@typescript-eslint/eslint-plugin": "^4.28.3",
+    "@typescript-eslint/parser": "^4.28.3",
+    "chai": "^4.3.4",
     "concurrently": "^6.2.0",
+    "coveralls": "^3.1.1",
+    "eslint": "^7.30.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.23.4",
+    "mocha": "^9.0.2",
     "nodemon": "^2.0.12",
+    "nyc": "^15.1.0",
+    "prettier": "^2.3.2",
+    "sinon-chai": "^3.7.0",
+    "supertest": "^6.1.3",
+    "ts-node": "^10.1.0",
     "tslint": "^6.1.3",
     "typescript": "^4.3.5"
   }
