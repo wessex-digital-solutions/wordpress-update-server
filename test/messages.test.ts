@@ -28,7 +28,7 @@ describe('Messages', () => {
         const message = res.body.message;
         expect(message).to.have.property('id');
         expect(message).to.have.property('name', data.name);
-        expect(message).to.have.property('message', data.message);
+        expect(message).to.have.property('message', `SAYS: ${data.message}`);
         done();
       });
   });
