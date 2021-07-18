@@ -20,3 +20,5 @@ export const createTables = (): Promise<void> =>
   executeQueryArray([createMessagesTable]);
 export const insertIntoTables = (): Promise<void> =>
   executeQueryArray([insertMessages]);
+export const resetTables = (): Promise<void> =>
+  executeQueryArray([dropMessagesTable, createMessagesTable, insertMessages]);

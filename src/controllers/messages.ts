@@ -25,7 +25,11 @@ export const getMessageById = async (
       'id, name, message',
       `WHERE id = ${req.params.messageId}`
     );
-    res.status(200).json({ message: data.rows[0] });
+    if (data.rows.length === 0) {
+      res.status(404).json({ message: 'Not Found' });
+    } else {
+      res.status(200).json({ message: data.rows[0] });
+    }
   } catch (error) {
     res.status(500).json({ message: error.stack });
   }
@@ -75,7 +79,11 @@ export const deleteMessage = async (
 ): Promise<void> => {
   try {
     const data = await messagesModel.delete(req.params.messageId);
-    res.status(200).json({ message: data.rows[0] });
+    if (data.rowCount === 0) {
+      res.status(404).json({ message: 'Not Found' });
+    } else {
+      res.status(204).send('');
+    }
   } catch (error) {
     res.status(500).json({ message: error.stack });
   }

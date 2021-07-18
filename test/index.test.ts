@@ -1,6 +1,11 @@
 import { expect, server, BASE_URL } from './setup';
 
 describe('Index page test', () => {
+  // test the home url
+  it('should return 200 for root endpoint', done => {
+    server.get('/').expect(200, done);
+  });
+
   it('gets base url', (done) => {
     server
       .get(`${BASE_URL}/`)
