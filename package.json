@@ -14,9 +14,11 @@
     "pretty": "prettier --write '**/*.{js,json}' '!node_modules/**'",
     "postpretty": "yarn lint --fix",
     "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' nyc --reporter=html --reporter=text --reporter=lcov mocha -r ts-node/register 'test/**/*.ts'",
-    "coverage": "nyc report --reporter=text-lcov | coveralls"
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "runQuery": "ts-node ./src/utils/runQuery"
   },
   "dependencies": {
+    "axios": "^0.21.1",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "debug": "^4.3.2",
@@ -24,6 +26,7 @@
     "express": "^4.17.1",
     "express-winston": "^4.1.0",
     "morgan": "^1.10.0",
+    "pg": "^8.6.0",
     "winston": "^3.3.3"
   },
   "devDependencies": {
@@ -35,6 +38,7 @@
     "@types/mocha": "^8.2.3",
     "@types/morgan": "^1.9.3",
     "@types/node": "^16.3.3",
+    "@types/pg": "^8.6.1",
     "@types/sinon-chai": "^3.2.5",
     "@types/supertest": "^2.0.11",
     "@typescript-eslint/eslint-plugin": "^4.28.3",
