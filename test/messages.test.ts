@@ -1,4 +1,3 @@
-import { createTables, insertIntoTables } from './../src/utils/queryFunctions';
 import { dropTables, resetTables } from '../src/utils/queryFunctions';
 import { expect, server, BASE_URL } from './setup';
 import { Message } from '../src/models/Message';
@@ -132,47 +131,58 @@ describe('Messages', () => {
 
   // test updating a message when the database connection is closed
   it('update message when the database connection is closed', (done) => {
-    dropTables();
-    server
-      .put(`${BASE_URL}/messages/1`)
-      .send({ name: 'test', message: 'test message' })
-      .expect(500)
-      .end(done);
-    resetTables();
+    dropTables().then(() => {
+      server
+        .put(`${BASE_URL}/messages/1`)
+        .send({ name: 'test', message: 'test message' })
+        .expect(500)
+        .end(() => {
+          resetTables();
+          done();
+        });
+    });
   });
 
   // test to make sure that an error is thrown when the database is down
   it('posts messages with a message when the database is down', (done) => {
     const data = { name: 'test name', message: 'test message' };
-    dropTables();
-    server
-      .post(`${BASE_URL}/messages`)
-      .send(data)
-      .expect(500)
-      .end((err, res) => {
-        expect(res.status).to.equal(500);
-        done();
-      });
-    resetTables();
+    dropTables().then(() => {
+      server
+        .post(`${BASE_URL}/messages`)
+        .send(data)
+        .expect(500)
+        .end((err, res) => {
+          expect(res.status).to.equal(500);
+          resetTables();
+          done();
+        });
+    });
   });
 
   // test getting a message by id when the database connection is closed
   it('get message by id when the database connection is closed', (done) => {
-    dropTables();
-    server.get(`${BASE_URL}/messages/1`).expect(500).end(done);
-    resetTables();
+    dropTables().then(() => {
+      server
+        .get(`${BASE_URL}/messages/1`)
+        .expect(500)
+        .end(() => {
+          resetTables();
+          done();
+        });
+    });
   });
 
   // test deleting a message when the database connection is closed
   it('delete message when the database connection is closed', (done) => {
-    dropTables();
-    server
-      .delete(`${BASE_URL}/messages/1`)
-      .expect(500)
-      .end((err, res) => {
-        expect(res.status).to.equal(500);
-        done();
-      });
-    resetTables();
+    dropTables().then(() => {
+      server
+        .delete(`${BASE_URL}/messages/1`)
+        .expect(500)
+        .end((err, res) => {
+          expect(res.status).to.equal(500);
+          resetTables();
+          done();
+        });
+    });
   });
 });
