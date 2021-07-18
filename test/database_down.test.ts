@@ -5,9 +5,21 @@ import {
 } from '../src/utils/queryFunctions';
 import { expect, server, BASE_URL } from './setup';
 
-describe('Database Down', () => {
+describe('Database Down', function () {
+  this.timeout(10000);
+
   beforeEach('drop tables', async () => {
     await dropTables();
+  });
+
+  it('get messages page when the database is down', (done) => {
+    server
+      .get(`${BASE_URL}/messages`)
+      .expect(500)
+      .end((err, res) => {
+        expect(res.status).to.equal(500);
+        done();
+      });
   });
 
   // test updating a message when the database connection is closed

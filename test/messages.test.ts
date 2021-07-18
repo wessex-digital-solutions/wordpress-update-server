@@ -1,4 +1,3 @@
-import { dropTables, resetTables } from '../src/utils/queryFunctions';
 import { expect, server, BASE_URL } from './setup';
 import { Message } from '../src/models/Message';
 
@@ -32,13 +31,13 @@ describe('Messages', () => {
   });
 
   // test getting a single message by id that doesn't exist
-  it('get message by id', (done) => {
+  it('get message by id that does not exist', (done) => {
     server
       .get(`${BASE_URL}/messages/100`)
       .expect(200)
       .end((err, res) => {
         expect(res.status).to.equal(404);
-        expect(res.body.message).to.equal('Not Found');
+        expect(res.body.error).to.equal('Not Found');
         done();
       });
   });
@@ -76,9 +75,45 @@ describe('Messages', () => {
       });
   });
 
+  // test updating a message without name
+  it('update message without name', (done) => {
+    server
+      .put(`${BASE_URL}/messages/1`)
+      .send({ message: 'test message' })
+      .expect(200)
+      .end((err, res) => {
+        expect(res.status).to.equal(200);
+        expect(res.body.message).to.have.property('name');
+        expect(res.body.message).to.have.property('message');
+        done();
+      });
+  });
+
   // test updating a message that doesn't exist
+  it('update message that does not exist', (done) => {
+    server
+      .put(`${BASE_URL}/messages/100`)
+      .send({ message: 'test message' })
+      .expect(404)
+      .end((err, res) => {
+        expect(res.status).to.equal(404);
+        expect(res.body.error).to.equal('Not Found');
+        done();
+      });
+  });
 
   // test updating a message with invalid data
+  it('update message without message', (done) => {
+    server
+      .put(`${BASE_URL}/messages/1`)
+      .send({ name: 'test name' })
+      .expect(400)
+      .end((err, res) => {
+        expect(res.status).to.equal(400);
+        expect(res.body.error).to.equal('message is required');
+        done();
+      });
+  });
 
   // test deleting a message
   it('delete message', (done) => {
@@ -99,21 +134,9 @@ describe('Messages', () => {
       .expect(500)
       .end((err, res) => {
         expect(res.status).to.equal(404);
-        expect(res.body.message).to.equal('Not Found');
+        expect(res.body.error).to.equal('Not Found');
         done();
       });
-  });
-
-  it('get messages page when the database is down', (done) => {
-    dropTables();
-    server
-      .get(`${BASE_URL}/messages`)
-      .expect(500)
-      .end((err, res) => {
-        expect(res.status).to.equal(500);
-        done();
-      });
-    resetTables();
   });
 
   // test to make sure that an error is thrown when a message is not sent

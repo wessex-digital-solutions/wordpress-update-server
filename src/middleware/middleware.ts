@@ -17,7 +17,7 @@ export const hasMessage = (
 ): void => {
   if (!req.body.message) {
     // res.status(400).send('Missing message');
-    next(new Error('Missing message'));
+    next(new Error('message is required'));
   } else {
     next();
   }

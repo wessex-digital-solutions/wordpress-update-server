@@ -21,7 +21,7 @@ const Cors = cors({
     'Access-Control-Request-Method',
     'Access-Control-Request-Headers',
   ],
-  methods: [ 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT', 'PATCH', 'DELETE' ],
+  methods: ['GET', 'HEAD', 'OPTIONS', 'POST', 'PUT', 'PATCH', 'DELETE'],
   credentials: true,
 });
 
@@ -39,7 +39,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.get('/', (req: express.Request, res: express.Response) => {
-  res.status(200).json({ message: 'Welcome to the API!,you can find all the endpoints here: https://github.com/wessex-digital-solutions/wordpress-update-server/wiki' });
+  res
+    .status(200)
+    .json({
+      message:
+        'Welcome to the API!,you can find all the endpoints here: https://github.com/wessex-digital-solutions/wordpress-update-server/wiki',
+    });
 });
 app.use('/v1', indexRouter);
 
@@ -52,7 +57,7 @@ app.use(
     next: express.NextFunction
   ): void => {
     log(err.stack);
-    res.status(400).json({ error: err.stack });
+    res.status(400).json({ error: err.message });
   }
 );
 

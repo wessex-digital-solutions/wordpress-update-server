@@ -41,14 +41,14 @@ class Model {
     let setData = '';
     let i = 1;
     for (const key in data) {
-      if (Object.prototype.hasOwnProperty.call(data, key)) {
+      if (data[key] !== undefined) {
         setData += `${key} = '${data[key]}'${
           Object.keys(data).length > i ? ', ' : ''
         }`;
       }
       i++;
     }
-    const query = `UPDATE ${this.table} SET ${setData}WHERE id = ${id} RETURNING id, ${columns}`;
+    const query = `UPDATE ${this.table} SET ${setData} WHERE id = ${id} RETURNING id, ${columns}`;
     return this.pool.query(query);
   }
 

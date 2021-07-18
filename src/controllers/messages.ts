@@ -11,7 +11,7 @@ export const messagesPage = async (
     const data = await messagesModel.select('name, message');
     res.status(200).json({ messages: data.rows });
   } catch (error) {
-    res.status(500).json({ message: error.stack });
+    res.status(500).json({ error: error.stack });
   }
 };
 
@@ -26,12 +26,12 @@ export const getMessageById = async (
       `WHERE id = ${req.params.messageId}`
     );
     if (data.rows.length === 0) {
-      res.status(404).json({ message: 'Not Found' });
+      res.status(404).json({ error: 'Not Found' });
     } else {
       res.status(200).json({ message: data.rows[0] });
     }
   } catch (error) {
-    res.status(500).json({ message: error.stack });
+    res.status(500).json({ error: error.stack });
   }
 };
 
@@ -66,9 +66,13 @@ export const updateMessage = async (
       updatedMessage,
       'name, message'
     );
-    res.status(200).json({ message: data.rows[0] });
+    if (data.rowCount === 0) {
+      res.status(404).json({ error: 'Not Found', status: 404 });
+    } else {
+      res.status(200).json({ message: data.rows[0] });
+    }
   } catch (error) {
-    res.status(500).json({ message: error.stack });
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -80,7 +84,7 @@ export const deleteMessage = async (
   try {
     const data = await messagesModel.delete(req.params.messageId);
     if (data.rowCount === 0) {
-      res.status(404).json({ message: 'Not Found' });
+      res.status(404).json({ error: 'Not Found', status: 404 });
     } else {
       res.status(204).send('');
     }
