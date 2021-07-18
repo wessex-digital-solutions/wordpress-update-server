@@ -21,7 +21,7 @@ const Cors = cors({
     'Access-Control-Request-Method',
     'Access-Control-Request-Headers',
   ],
-  methods: ['GET', 'HEAD', 'OPTIONS', 'POST', 'PUT', 'PATCH', 'DELETE'],
+  methods: [ 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT', 'PATCH', 'DELETE' ],
   credentials: true,
 });
 
