@@ -11,7 +11,13 @@
   "settings": {},
 
   // Add the IDs of extensions you want installed when the container is created.
-  "extensions": ["dbaeumer.vscode-eslint", "patbenatar.advanced-new-file"],
+  "extensions": [
+	"dbaeumer.vscode-eslint",
+	"patbenatar.advanced-new-file",
+	"github.copilot",
+	"ms-vsliveshare.vsliveshare",
+	"rangav.vscode-thunder-client"
+],
 
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   // "forwardPorts": [],

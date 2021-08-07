@@ -17,7 +17,7 @@ services:
     volumes:
       - ..:/workspace
     user: vscode
-    command: sleep indefinitely
+    command: sleep infinity
   db:
     image: 'postgres:12'
     restart: unless-stopped
