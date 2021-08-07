@@ -13,19 +13,18 @@ services:
       <<: *default-environment
       PORT: 3000
     ports:
-      - 3000:3000
+      - '3000:3000'
     volumes:
       - ..:/workspace
     user: vscode
-    command: sleep infinity
+    command: sleep indefinitely
   db:
     image: 'postgres:12'
     restart: unless-stopped
     environment: *default-environment
     ports:
-      - 5432:5432
+      - '5432:5432'
     volumes:
       - pgdata:/var/lib/postgresql/data
-      # - ../postgresql/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
 volumes:
   pgdata:
