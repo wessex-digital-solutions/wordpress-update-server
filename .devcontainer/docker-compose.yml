@@ -4,6 +4,7 @@ x-environment: &default-environment
   POSTGRES_USER: vscode
   POSTGRES_PASSWORD: notsecure
   POSTGRES_DB: wordpress-updates
+  DATABASE_URL: postgres://vscode:notsecure@db:5432/wordpress-updates
 services:
   app:
     build:
