@@ -12,31 +12,32 @@ export class AuthorsService {
     private readonly authorRepository: Repository<Author>,
   ) {}
 
-  create(createAuthorDto: CreateAuthorDto) {
-    const author = new Author();
-    author.name = createAuthorDto.name;
-    author.location = createAuthorDto.location;
-    author.website = createAuthorDto.website;
-    author.bio = createAuthorDto.bio;
-    author.registered = new Date();
-    return this.authorRepository.save(author);
+  async create(createAuthorDto: CreateAuthorDto): Promise<Author> {
+    const newAuthor = this.authorRepository.create(createAuthorDto);
+    await this.authorRepository.save(newAuthor);
+    return newAuthor;
   }
 
   findAll() {
-    return `This action returns all authors`;
+    return this.authorRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} author`;
+  async findOne(id: number): Promise<Author> {
+    return await this.authorRepository.findOneOrFail({ id });
   }
 
-  update(id: number, updateAuthorDto: UpdateAuthorDto) {
-    const author = new Author();
-    author.name = updateAuthorDto.name;
-    return `This action updates a #${id} author`;
+  async update(updateAuthorDto: UpdateAuthorDto) {
+    const { id } = updateAuthorDto;
+    await this.authorRepository.update({ id }, updateAuthorDto);
+    return this.findOne(id);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} author`;
+  async remove(id: number): Promise<{ deleted: boolean; message?: string }> {
+    try {
+      await this.authorRepository.delete({ id });
+      return { deleted: true };
+    } catch (err) {
+      return { deleted: false, message: err.message };
+    }
   }
 }

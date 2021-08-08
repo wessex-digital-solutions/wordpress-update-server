@@ -1,6 +1,6 @@
 export class CreateAuthorDto {
   name: string;
-  registered: Date;
+  registered?: Date;
   location: string;
   website: string;
   bio: string;

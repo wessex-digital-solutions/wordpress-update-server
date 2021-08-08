@@ -10,6 +10,7 @@ import {
 import { AuthorsService } from './authors.service';
 import { CreateAuthorDto } from './dto/create-author.dto';
 import { UpdateAuthorDto } from './dto/update-author.dto';
+import { Author } from './entities/author.entity';
 
 @Controller('authors')
 export class AuthorsController {
@@ -26,17 +27,17 @@ export class AuthorsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: number) {
     return this.authorsService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAuthorDto: UpdateAuthorDto) {
-    return this.authorsService.update(+id, updateAuthorDto);
+  @Patch()
+  async update(@Body() updateAuthorDto: UpdateAuthorDto): Promise<Author> {
+    return this.authorsService.update(updateAuthorDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: number): Promise<{ deleted: boolean }> {
     return this.authorsService.remove(+id);
   }
 }

@@ -10,3 +10,5 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   providers: [PluginsService],
 })
 export class PluginsModule {}
+
+// https://github.com/jmcdo29/testing-nestjs/tree/master/apps/typeorm-sample

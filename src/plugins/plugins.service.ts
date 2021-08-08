@@ -21,6 +21,8 @@ export class PluginsService {
     plugin.license = createPluginDto.license;
     plugin.homepage = createPluginDto.homepage;
     plugin.repository = createPluginDto.repository;
+    plugin.enabled = true;
+    plugin.keywords = createPluginDto.keywords;
     return this.pluginRepository.save(plugin);
   }
 

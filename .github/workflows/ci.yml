@@ -1,0 +1,59 @@
+name: Continuous Integration Testing
+
+on:
+  pull_request:
+    branches:
+      - 'master'
+      - 'main'
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x, 14.x]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use NodeJS ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: npm install
+        run: npm ci
+      - name: npm test
+        run: npm run test -- ${{ matrix.test }}
+
+  e2e-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x, 14.x]
+    needs: [unit-tests]
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Start Docker-Compose
+        run: docker-compose up -d
+      - name: npm install
+        run: npm ci
+      - name: Run tests
+        run: npm run test:e2e
+      - name: Collect coverage
+        run: npm run test:cov:total
+      - name: Stop Docker-Compose
+        run: docker-compose down
+
+  automerge:
+    needs: e2e-test
+    if: contains(github.event.pull_request.user.login, 'dependabot')
+    runs-on: ubuntu-latest
+    steps:
+      - name: automerge
+        uses: 'pascalgn/automerge-action@v0.12.0'
+        env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+          MERGE_LABELS: ''
+          MERGE_METHOD: rebase

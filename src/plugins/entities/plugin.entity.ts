@@ -32,4 +32,22 @@ export class Plugin {
 
   @Column()
   repository: string;
+
+  constructor(
+    name?: string,
+    description?: string,
+    version?: string,
+    homepage?: string,
+    keywords?: string[],
+    license?: string,
+    repository?: string,
+  ) {
+    this.name = name;
+    this.description = description;
+    this.version = version;
+    this.homepage = homepage;
+    this.keywords = keywords;
+    this.license = license;
+    this.repository = repository;
+  }
 }
