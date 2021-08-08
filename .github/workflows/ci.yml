@@ -48,7 +48,7 @@ jobs:
         env:
           DATABASE_URL: postgres://vscode:notsecure@localhost:5432/wordpress-updates
       - name: Stop Docker-Compose
-        run: docker-compose down
+        run: docker-compose -f ./.devcontainer/docker-compose.yml down
 
   automerge:
     needs: e2e-test
