@@ -43,6 +43,8 @@ jobs:
         run: npm run test:e2e
       - name: Collect coverage
         run: npm run test:cov:total
+        env:
+          DATABASE_URL: postgres://vscode:notsecure@db:5432/wordpress-updates
       - name: Stop Docker-Compose
         run: docker-compose down
 
