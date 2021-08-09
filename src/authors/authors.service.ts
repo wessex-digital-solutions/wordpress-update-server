@@ -18,7 +18,7 @@ export class AuthorsService {
     return newAuthor;
   }
 
-  findAll() {
+  async findAll() {
     return this.authorRepository.find();
   }
 

@@ -12,29 +12,32 @@ export class UsersService {
     private readonly usersRepository: Repository<User>,
   ) {}
 
-  create(createUserDto: CreateUserDto) {
-    const user = new User();
-    user.username = createUserDto.username;
-    user.password = createUserDto.password;
-    return this.usersRepository.save(user);
+  async create(createUserDto: CreateUserDto) {
+    const newUser = this.usersRepository.create(createUserDto);
+    await this.usersRepository.save(newUser);
+    return newUser;
   }
 
-  findAll() {
+  async findAll() {
     return this.usersRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: number): Promise<User> {
+    return await this.usersRepository.findOneOrFail({ id });
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    const user = new User();
-    user.username = updateUserDto.username;
-    user.password = updateUserDto.password;
-    return `This action updates a #${id} user`;
+  async update(updateUserDto: UpdateUserDto) {
+    const { id } = updateUserDto;
+    await this.usersRepository.update({ id }, updateUserDto);
+    return this.findOne(id);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number): Promise<{ deleted: boolean; message?: string }> {
+    try {
+      await this.usersRepository.delete({ id });
+      return { deleted: true };
+    } catch (err) {
+      return { deleted: false, message: err.message };
+    }
   }
 }
