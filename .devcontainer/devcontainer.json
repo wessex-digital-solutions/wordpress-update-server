@@ -1,7 +1,7 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
-// https://github.com/microsoft/vscode-dev-containers/tree/v0.187.0/containers/typescript-node
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.191.0/containers/typescript-node
 {
-  "name": "Node.js & TypeScript",
+  "name": "WordPress Update Server with Node.js & TypeScript",
 
   "dockerComposeFile": "docker-compose.yml",
   "service": "app",
@@ -11,7 +11,14 @@
   "settings": {},
 
   // Add the IDs of extensions you want installed when the container is created.
-  "extensions": ["dbaeumer.vscode-eslint"],
+  "extensions": [
+	"dbaeumer.vscode-eslint",
+	"patbenatar.advanced-new-file",
+	"github.copilot",
+	"ms-vsliveshare.vsliveshare",
+	"rangav.vscode-thunder-client",
+	"vtrois.gitmoji-vscode"
+],
 
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   // "forwardPorts": [],

@@ -4,6 +4,7 @@ x-environment: &default-environment
   POSTGRES_USER: vscode
   POSTGRES_PASSWORD: notsecure
   POSTGRES_DB: wordpress-updates
+  DATABASE_URL: postgres://vscode:notsecure@db:5432/wordpress-updates
 services:
   app:
     build:
@@ -13,7 +14,7 @@ services:
       <<: *default-environment
       PORT: 3000
     ports:
-      - 3000:3000
+      - '3000:3000'
     volumes:
       - ..:/workspace
     user: vscode
@@ -23,9 +24,8 @@ services:
     restart: unless-stopped
     environment: *default-environment
     ports:
-      - 5432:5432
+      - '5432:5432'
     volumes:
       - pgdata:/var/lib/postgresql/data
-      # - ../postgresql/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
 volumes:
   pgdata:
