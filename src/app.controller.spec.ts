@@ -16,7 +16,10 @@ describe('AppController', () => {
 
   describe('root', () => {
     it('should return "Hello World!!"', () => {
-      expect(appController.getHello()).toBe('Hello World!');
+      expect(appController.getHello()).toEqual({
+        message:
+          'Welcome to the API!,you can find all the endpoints here: https://github.com/wessex-digital-solutions/wordpress-update-server/wiki',
+      });
     });
   });
 });
