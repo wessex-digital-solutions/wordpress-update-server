@@ -17,6 +17,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       autoLoadEntities: true,
       synchronize: true,
       entities: [__dirname + '/**/*.entity.{ts,js}'],
+      ssl: process.env.NODE_ENV === 'production' ? true : false,
     }),
     UsersModule,
     AuthorsModule,
