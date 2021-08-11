@@ -20,9 +20,9 @@ describe('AppController (e2e)', () => {
   });
 
   it('/ (GET)', () => {
-    return request(app.getHttpServer())
-      .get('/')
-      .expect(200)
-      .expect('Hello World!');
+    return request(app.getHttpServer()).get('/').expect(200).expect({
+      message:
+        'Welcome to the API!,you can find all the endpoints here: https://github.com/wessex-digital-solutions/wordpress-update-server/wiki',
+    });
   });
 });
