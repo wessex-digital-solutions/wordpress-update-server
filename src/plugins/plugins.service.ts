@@ -12,36 +12,35 @@ export class PluginsService {
     private readonly pluginRepository: Repository<Plugin>,
   ) {}
 
-  create(createPluginDto: CreatePluginDto) {
-    const plugin = new Plugin();
-    plugin.name = createPluginDto.name;
-    plugin.description = createPluginDto.description;
-    plugin.version = createPluginDto.version;
-    plugin.author = createPluginDto.author;
-    plugin.license = createPluginDto.license;
-    plugin.homepage = createPluginDto.homepage;
-    plugin.repository = createPluginDto.repository;
-    plugin.enabled = true;
-    plugin.keywords = createPluginDto.keywords;
-    return this.pluginRepository.save(plugin);
+  async create(createPluginDto: CreatePluginDto): Promise<Plugin> {
+    const newPlugin = this.pluginRepository.create({
+      ...createPluginDto,
+      enabled: true,
+    });
+    await this.pluginRepository.save(newPlugin);
+    return newPlugin;
   }
 
-  findAll() {
-    return `This action returns all plugins`;
+  async findAll() {
+    return this.pluginRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} plugin`;
+  async findOne(id: string): Promise<Plugin> {
+    return await this.pluginRepository.findOneOrFail({ id });
   }
 
-  update(id: number, updatePluginDto: UpdatePluginDto) {
-    const plugin = new Plugin();
-    plugin.name = updatePluginDto.name;
-    plugin.description = updatePluginDto.description;
-    return `This action updates a #${id} plugin`;
+  async update(updatePluginDto: UpdatePluginDto): Promise<Plugin> {
+    const { id } = updatePluginDto;
+    await this.pluginRepository.update({ id }, updatePluginDto);
+    return this.findOne(id);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} plugin`;
+  async remove(id: string): Promise<{ deleted: boolean; message?: string }> {
+    try {
+      await this.pluginRepository.delete({ id });
+      return { deleted: true };
+    } catch (err) {
+      return { deleted: false, message: err.message };
+    }
   }
 }

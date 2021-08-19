@@ -27,16 +27,16 @@ export class ThemesController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.themesService.findOne(+id);
+    return this.themesService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateThemeDto: UpdateThemeDto) {
-    return this.themesService.update(+id, updateThemeDto);
+  @Patch()
+  update(@Body() updateThemeDto: UpdateThemeDto) {
+    return this.themesService.update(updateThemeDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.themesService.remove(+id);
+    return this.themesService.remove(id);
   }
 }

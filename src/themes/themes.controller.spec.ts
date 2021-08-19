@@ -8,6 +8,7 @@ const testTheme1Description = 'Test theme 1 description';
 
 describe('ThemesController', () => {
   let controller: ThemesController;
+  let service: ThemesService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -16,49 +17,153 @@ describe('ThemesController', () => {
         {
           provide: ThemesService,
           useValue: {
-            getAll: jest.fn().mockResolvedValue([
-              { name: testTheme1Name, description: testTheme1Description },
+            findAll: jest.fn().mockResolvedValue([
+              {
+                name: testTheme1Name,
+                description: testTheme1Description,
+                version: '1.0.0',
+                enabled: true,
+              },
               {
                 name: 'Test theme 2',
                 description: 'Test theme 2 description',
+                version: '1.0.0',
+                enabled: true,
               },
               {
                 name: 'Test theme 3',
                 description: 'Test theme 3 description',
+                version: '1.0.0',
+                enabled: true,
               },
             ]),
-            getOne: jest.fn().mockImplementation((id: string) =>
+            findOne: jest.fn().mockImplementation((id: string) =>
               Promise.resolve({
                 name: testTheme1Name,
                 description: testTheme1Description,
+                version: '1.0.0',
+                enabled: true,
                 id,
               }),
             ),
-            getOneByName: jest
-              .fn()
-              .mockImplementation((name: string) =>
-                Promise.resolve({ name, description: testTheme1Description }),
-              ),
-            insertOne: jest
-              .fn()
-              .mockImplementation((theme: CreateThemeDto) =>
-                Promise.resolve({ id: '123-uuid', ...theme }),
-              ),
-            updateOne: jest
+            getOneByName: jest.fn().mockImplementation((name: string) =>
+              Promise.resolve({
+                name,
+                description: testTheme1Description,
+                version: '1.0.0',
+                enabled: true,
+              }),
+            ),
+            create: jest
               .fn()
               .mockImplementation((theme: CreateThemeDto) =>
-                Promise.resolve({ id: '123-uuid', ...theme }),
+                Promise.resolve({ id: 'a-uuid', ...theme }),
               ),
-            deleteOne: jest.fn().mockResolvedValue({ deleted: true }),
+            update: jest
+              .fn()
+              .mockImplementation((theme: CreateThemeDto) =>
+                Promise.resolve({ id: 'a-uuid', ...theme }),
+              ),
+            remove: jest.fn().mockResolvedValue({ deleted: true }),
           },
         },
       ],
     }).compile();
 
     controller = module.get<ThemesController>(ThemesController);
+    service = module.get<ThemesService>(ThemesService);
   });
 
   it('should be defined', () => {
     expect(controller).toBeDefined();
+  });
+
+  describe('getThemes', () => {
+    it('should return all themes', async () => {
+      await expect(controller.findAll()).resolves.toEqual([
+        {
+          name: testTheme1Name,
+          description: testTheme1Description,
+          version: '1.0.0',
+          enabled: true,
+        },
+        {
+          name: 'Test theme 2',
+          description: 'Test theme 2 description',
+          version: '1.0.0',
+          enabled: true,
+        },
+        {
+          name: 'Test theme 3',
+          description: 'Test theme 3 description',
+          version: '1.0.0',
+          enabled: true,
+        },
+      ]);
+    });
+  });
+
+  describe('getTheme', () => {
+    it('should return theme by id', async () => {
+      await expect(controller.findOne('a-uuid')).resolves.toEqual({
+        name: testTheme1Name,
+        description: testTheme1Description,
+        version: '1.0.0',
+        enabled: true,
+        id: 'a-uuid',
+      });
+      await expect(controller.findOne('123-uuid')).resolves.toEqual({
+        name: testTheme1Name,
+        description: testTheme1Description,
+        version: '1.0.0',
+        enabled: true,
+        id: '123-uuid',
+      });
+    });
+  });
+
+  describe('createTheme', () => {
+    it('should create new theme', async () => {
+      const newThemeDTO: CreateThemeDto = {
+        name: 'Test theme 4',
+        description: 'Test theme 4 description',
+        version: '1.0.0',
+      };
+      await expect(controller.create(newThemeDTO)).resolves.toEqual({
+        id: 'a-uuid',
+        ...newThemeDTO,
+      });
+    });
+  });
+
+  describe('updateTheme', () => {
+    it('should update theme', async () => {
+      const newThemeDTO: CreateThemeDto = {
+        name: 'Test theme 4',
+        description: 'Test theme 4 description',
+        version: '1.0.0',
+      };
+      await expect(controller.update(newThemeDTO)).resolves.toEqual({
+        id: 'a-uuid',
+        ...newThemeDTO,
+      });
+    });
+  });
+
+  describe('deleteTheme', () => {
+    it('should delete theme', async () => {
+      await expect(controller.remove('a-uuid')).resolves.toEqual({
+        deleted: true,
+      });
+    });
+    it('should not delete theme', async () => {
+      const deleteSpy = jest
+        .spyOn(service, 'remove')
+        .mockResolvedValueOnce({ deleted: false });
+      await expect(controller.remove('123-uuid')).resolves.toEqual({
+        deleted: false,
+      });
+      expect(deleteSpy).toHaveBeenCalledWith('123-uuid');
+    });
   });
 });

@@ -9,5 +9,5 @@ export class CreatePluginDto {
   homepage?: string;
   license?: string;
   repository?: string;
-  keywords: string[];
+  keywords?: string[];
 }

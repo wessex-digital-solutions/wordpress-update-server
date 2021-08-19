@@ -12,31 +12,35 @@ export class ThemesService {
     private readonly themeRepository: Repository<Theme>,
   ) {}
 
-  create(createThemeDto: CreateThemeDto) {
-    const theme = new Theme();
-    theme.name = createThemeDto.name;
-    theme.description = createThemeDto.description;
-    theme.version = createThemeDto.version;
-    return;
+  async create(createThemeDto: CreateThemeDto) {
+    const newTheme = this.themeRepository.create({
+      ...createThemeDto,
+      enabled: true,
+    });
+    await this.themeRepository.save(newTheme);
+    return newTheme;
   }
 
   findAll() {
     return this.themeRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} theme`;
+  async findOne(id: string): Promise<Theme> {
+    return await this.themeRepository.findOneOrFail({ id });
   }
 
-  update(id: number, updateThemeDto: UpdateThemeDto) {
-    const theme = new Theme();
-    theme.name = updateThemeDto.name;
-    theme.description = updateThemeDto.description;
-    theme.version = updateThemeDto.version;
-    return this.themeRepository.findOne(id);
+  async update(updateThemeDto: UpdateThemeDto) {
+    const { id } = updateThemeDto;
+    await this.themeRepository.update({ id }, updateThemeDto);
+    return this.findOne(id);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} theme`;
+  async remove(id: string): Promise<{ deleted: boolean; message?: string }> {
+    try {
+      await this.themeRepository.delete({ id });
+      return { deleted: true };
+    } catch (err) {
+      return { deleted: false, message: err.message };
+    }
   }
 }

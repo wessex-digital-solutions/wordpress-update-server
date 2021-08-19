@@ -4,9 +4,9 @@ export class CreateThemeDto {
   name: string;
   description: string;
   version: string;
-  author: Author;
-  enabled: boolean;
-  homepage: string;
-  license: string;
-  repository: string;
+  author?: Author;
+  enabled?: boolean;
+  homepage?: string;
+  license?: string;
+  repository?: string;
 }

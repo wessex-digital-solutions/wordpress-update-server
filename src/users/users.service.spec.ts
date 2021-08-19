@@ -17,7 +17,7 @@ const oneUser = new User(testUser1, testPassword1);
 
 describe('UsersService', () => {
   let service: UsersService;
-  // let repo: Repository<User>;
+  let repo: Repository<User>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -44,10 +44,80 @@ describe('UsersService', () => {
     }).compile();
 
     service = module.get<UsersService>(UsersService);
-    // repo = module.get<Repository<User>>(getRepositoryToken(User));
+    repo = module.get<Repository<User>>(getRepositoryToken(User));
   });
 
   it('should be defined', () => {
     expect(service).toBeDefined();
+  });
+
+  describe('findAll', () => {
+    it('should return all users', async () => {
+      const users = await service.findAll();
+      expect(users).toEqual(userArray);
+    });
+  });
+
+  describe('findOne', () => {
+    it('should return one user', () => {
+      const repoSpy = jest.spyOn(repo, 'findOneOrFail');
+      expect(service.findOne(1)).resolves.toEqual(oneUser);
+      expect(repoSpy).toHaveBeenCalledWith({ id: 1 });
+    });
+  });
+
+  describe('create', () => {
+    it('should create a new user', () => {
+      expect(
+        service.create({
+          username: testUser1,
+          password: testPassword1,
+        }),
+      ).resolves.toEqual(oneUser);
+      expect(repo.create).toBeCalledTimes(1);
+      expect(repo.create).toBeCalledWith({
+        username: testUser1,
+        password: testPassword1,
+      });
+      expect(repo.save).toBeCalledTimes(1);
+    });
+  });
+
+  describe('update', () => {
+    it('should update a user', () => {
+      expect(
+        service.update({
+          username: testUser1,
+          password: testPassword1,
+          id: 1,
+        }),
+      ).resolves.toEqual(oneUser);
+      expect(repo.update).toBeCalledTimes(1);
+      expect(repo.update).toBeCalledWith(
+        { id: 1 },
+        {
+          id: 1,
+          username: testUser1,
+          password: testPassword1,
+        },
+      );
+    });
+  });
+
+  describe('delete', () => {
+    it('should return {deleted: true}', () => {
+      expect(service.remove(1)).resolves.toEqual({ deleted: true });
+    });
+    it('should return {deleted: false, message: err.message}', () => {
+      const repoSpy = jest
+        .spyOn(repo, 'delete')
+        .mockRejectedValueOnce(new Error('Bad Delete Method.'));
+      expect(service.remove(100)).resolves.toEqual({
+        deleted: false,
+        message: 'Bad Delete Method.',
+      });
+      expect(repoSpy).toBeCalledWith({ id: 100 });
+      expect(repoSpy).toBeCalledTimes(1);
+    });
   });
 });

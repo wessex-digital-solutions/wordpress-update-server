@@ -21,22 +21,22 @@ export class PluginsController {
   }
 
   @Get()
-  findAll() {
+  async findAll() {
     return this.pluginsService.findAll();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.pluginsService.findOne(+id);
+    return this.pluginsService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePluginDto: UpdatePluginDto) {
-    return this.pluginsService.update(+id, updatePluginDto);
+  update(@Body() updatePluginDto: UpdatePluginDto) {
+    return this.pluginsService.update(updatePluginDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.pluginsService.remove(+id);
+    return this.pluginsService.remove(id);
   }
 }
