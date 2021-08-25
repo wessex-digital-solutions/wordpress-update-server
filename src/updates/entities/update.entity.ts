@@ -1,6 +1,6 @@
-import { Theme } from 'src/themes/entities/theme.entity';
 import { PrimaryGeneratedColumn, Column, ManyToOne, Entity } from 'typeorm';
 import { Plugin } from '../../plugins/entities/plugin.entity';
+import { Theme } from '../../themes/entities/theme.entity';
 
 @Entity()
 export class Update {

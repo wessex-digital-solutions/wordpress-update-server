@@ -1,4 +1,3 @@
-import { Update } from 'src/updates/entities/update.entity';
 import {
   PrimaryGeneratedColumn,
   Column,
@@ -7,6 +6,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { Author } from '../../authors/entities/author.entity';
+import { Update } from '../../updates/entities/update.entity';
 
 @Entity()
 export class Plugin {
