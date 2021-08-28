@@ -16,6 +16,9 @@ export class Update {
   @Column()
   version: string;
 
+  @Column()
+  hash: string;
+
   @Column('text')
   changelog: string;
 
@@ -36,4 +39,8 @@ export class Update {
 
   @ManyToOne(() => Theme, (theme) => theme.updates)
   theme: Theme;
+
+  constructor(partial: Partial<Update>) {
+    Object.assign(this, partial);
+  }
 }
