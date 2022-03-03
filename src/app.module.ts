@@ -7,6 +7,7 @@ import { PluginsModule } from './plugins/plugins.module';
 import { AuthorsModule } from './authors/authors.module';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UpdatesModule } from './updates/updates.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     AuthorsModule,
     PluginsModule,
     ThemesModule,
+    UpdatesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,6 +1,12 @@
-import { PrimaryGeneratedColumn, Column, Entity, ManyToOne } from 'typeorm';
+import {
+  PrimaryGeneratedColumn,
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
 import { Author } from '../../authors/entities/author.entity';
-
+import { Update } from '../../updates/entities/update.entity';
 @Entity()
 export class Theme {
   @PrimaryGeneratedColumn('uuid')
@@ -14,9 +20,6 @@ export class Theme {
 
   @Column()
   version: string;
-
-  @ManyToOne(() => Author, (author) => author.themes)
-  author: Author;
 
   @Column()
   enabled: boolean;
@@ -32,6 +35,12 @@ export class Theme {
 
   @Column()
   repository: string;
+
+  @ManyToOne(() => Author, (author) => author.themes)
+  author: Author;
+
+  @OneToMany(() => Update, (update) => update.theme)
+  updates: Update[];
 
   constructor(
     name?: string,

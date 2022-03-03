@@ -1,5 +1,12 @@
-import { PrimaryGeneratedColumn, Column, Entity, ManyToOne } from 'typeorm';
+import {
+  PrimaryGeneratedColumn,
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
 import { Author } from '../../authors/entities/author.entity';
+import { Update } from '../../updates/entities/update.entity';
 
 @Entity()
 export class Plugin {
@@ -15,9 +22,6 @@ export class Plugin {
   @Column()
   version: string;
 
-  @ManyToOne(() => Author, (author) => author.plugins)
-  author: Author;
-
   @Column()
   enabled: boolean;
 
@@ -32,6 +36,12 @@ export class Plugin {
 
   @Column()
   repository: string;
+
+  @ManyToOne(() => Author, (author) => author.plugins)
+  author: Author;
+
+  @OneToMany(() => Update, (update) => update.plugin)
+  updates: Update[];
 
   constructor(
     name?: string,
