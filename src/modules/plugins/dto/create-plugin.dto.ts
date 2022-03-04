@@ -1,12 +1,13 @@
-import { Author } from 'src/authors/entities/author.entity';
+import { Author } from '../../authors/entities/author.entity';
 
-export class CreateThemeDto {
+export class CreatePluginDto {
   name: string;
-  description: string;
+  description?: string;
   version: string;
   author?: Author;
   enabled?: boolean;
   homepage?: string;
   license?: string;
   repository?: string;
+  keywords?: string[];
 }

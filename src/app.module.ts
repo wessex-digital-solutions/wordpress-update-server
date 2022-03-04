@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ThemesModule } from './themes/themes.module';
-import { PluginsModule } from './plugins/plugins.module';
-import { AuthorsModule } from './authors/authors.module';
-import { UsersModule } from './users/users.module';
+import { ThemesModule } from './modules/themes/themes.module';
+import { PluginsModule } from './modules/plugins/plugins.module';
+import { AuthorsModule } from './modules/authors/authors.module';
+import { UsersModule } from './modules/users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
