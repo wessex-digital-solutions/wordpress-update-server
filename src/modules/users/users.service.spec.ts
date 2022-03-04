@@ -1,15 +1,18 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
 
 const testUser1 = 'Test User 1';
 const testPassword1 = 'Test Password 1';
 
+const testUser2 = 'Test User 2';
+
 const userArray = [
   new User(testUser1, testPassword1),
-  new User('Test User 2', 'Test Password 2'),
+  new User(testUser2, 'Test Password 2'),
   new User('Test User 3', 'Test Password 3'),
 ];
 
@@ -29,6 +32,7 @@ describe('UsersService', () => {
           // give proper return values as expected or mock implementations, your choice
           useValue: {
             find: jest.fn().mockResolvedValue(userArray),
+            findOne: jest.fn().mockResolvedValue(null),
             findOneOrFail: jest.fn().mockResolvedValue(oneUser),
             create: jest.fn().mockReturnValue(oneUser),
             save: jest.fn(),
@@ -61,46 +65,31 @@ describe('UsersService', () => {
   describe('findOne', () => {
     it('should return one user', () => {
       const repoSpy = jest.spyOn(repo, 'findOneOrFail');
-      expect(service.findOne(1)).resolves.toEqual(oneUser);
+      expect(service.findOne({ id: 1 })).resolves.toEqual(oneUser);
       expect(repoSpy).toHaveBeenCalledWith({ id: 1 });
     });
   });
 
   describe('create', () => {
-    it('should create a new user', () => {
-      expect(
-        service.create({
-          username: testUser1,
-          password: testPassword1,
-        }),
-      ).resolves.toEqual(oneUser);
-      expect(repo.create).toBeCalledTimes(1);
-      expect(repo.create).toBeCalledWith({
-        username: testUser1,
+    it('should create a new user', async () => {
+      const user = await service.create({
+        username: testUser2,
         password: testPassword1,
       });
+      expect(user).toBeInstanceOf(User);
+      expect(repo.create).toBeCalledTimes(1);
       expect(repo.save).toBeCalledTimes(1);
     });
   });
 
   describe('update', () => {
-    it('should update a user', () => {
-      expect(
-        service.update({
-          username: testUser1,
-          password: testPassword1,
-          id: 1,
-        }),
-      ).resolves.toEqual(oneUser);
+    it('should update a user', async () => {
+      await service.update({
+        username: testUser1,
+        password: testPassword1,
+        id: 1,
+      });
       expect(repo.update).toBeCalledTimes(1);
-      expect(repo.update).toBeCalledWith(
-        { id: 1 },
-        {
-          id: 1,
-          username: testUser1,
-          password: testPassword1,
-        },
-      );
     });
   });
 

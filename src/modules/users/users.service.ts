@@ -14,16 +14,20 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    const registeredUser = await this.usersRepository.findOne({
-      username: createUserDto.username,
-    });
-    if (registeredUser) {
-      throw new BadRequestException('Username already exists');
+    try {
+      const registeredUser = await this.usersRepository.findOne({
+        username: createUserDto.username,
+      });
+      if (registeredUser) {
+        throw new BadRequestException('Username already exists');
+      }
+      createUserDto.password = await this.setPassword(createUserDto.password);
+      const newUser = this.usersRepository.create(createUserDto);
+      await this.usersRepository.save(newUser);
+      return newUser;
+    } catch (error) {
+      throw new BadRequestException(error.message);
     }
-    createUserDto.password = await this.setPassword(createUserDto.password);
-    const newUser = this.usersRepository.create(createUserDto);
-    await this.usersRepository.save(newUser);
-    return newUser;
   }
 
   async findAll() {
@@ -31,16 +35,20 @@ export class UsersService {
   }
 
   async findOne(findConditions: FindConditions<User>): Promise<User> {
-    return await this.usersRepository.findOneOrFail(findConditions);
+    return this.usersRepository.findOneOrFail(findConditions);
   }
 
   async update(updateUserDto: UpdateUserDto) {
-    const { id, password } = updateUserDto;
-    if (password) {
-      updateUserDto.password = await this.setPassword(updateUserDto.password);
+    try {
+      const { id, password } = updateUserDto;
+      if (password) {
+        updateUserDto.password = await this.setPassword(updateUserDto.password);
+      }
+      await this.usersRepository.update({ id }, updateUserDto);
+      return this.findOne({ id });
+    } catch (error) {
+      console.log(error);
     }
-    await this.usersRepository.update({ id }, updateUserDto);
-    return this.findOne({ id });
   }
 
   async remove(id: number): Promise<{ deleted: boolean; message?: string }> {

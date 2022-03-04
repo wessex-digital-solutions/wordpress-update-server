@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
@@ -22,7 +23,7 @@ describe('UsersController', () => {
               { username: 'Test User 2', password: 'Test Password 2' },
               { username: 'Test User 3', password: 'Test Password 3' },
             ]),
-            findOne: jest.fn().mockImplementation((id: number) =>
+            findOne: jest.fn().mockImplementation(({ id }) =>
               Promise.resolve({
                 username: testUser1,
                 password: testPassword1,
