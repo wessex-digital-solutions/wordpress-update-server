@@ -20,7 +20,7 @@ services:
     user: vscode
     command: sleep infinity
   db:
-    image: 'postgres:14'
+    image: 'postgres:15'
     restart: unless-stopped
     environment: *default-environment
     ports:
