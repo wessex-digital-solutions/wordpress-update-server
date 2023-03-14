@@ -3,7 +3,7 @@
   "packageRules": [
     {
       "matchDepTypes": ["devDependencies"],
-      "matchPackagePatterns": ["lint", "prettier"],
+      "matchPackagePatterns": ["lint", "prettier", "@types"],
       "automerge": true
     }
   ]
